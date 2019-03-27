@@ -27,10 +27,6 @@ def subsets(s):
                 aset = ts[:i]+ts[i+1:]
                 aset.sort()
                 tmp.append(aset+[])
-#        print(res)
-#        print('-----------------------')
-#        print(tmp)
-#        print('====================')
     return res
 
 def sumup(s):
@@ -81,4 +77,95 @@ def gen_from_seed(seed):
     res.sort()
     return res
 
+def equ_subset_pairs(s):
+    resl = []
+    ssets = subsets(s)
+    for i in range(len(ssets)):
+        for j in range(i, len(ssets)):
+            subset1 = ssets[i]
+            subset2 = ssets[j]
+            if(subset1 and subset2) and is_disjoint(subset1, subset2):# and (len(subset1) == len(subset2)) or (0 < ((len(subset1) - len(subset2)) * (sumup(subset1) - sumup(subset2))))):
+                if((len(subset1) < len(subset2))):
+                    resl.append((subset2, subset1))
+                else:
+                    resl.append((subset1, subset2))
+    return resl
 
+def equ_subset_pairs(s):
+    resl = []
+    ssets = subsets(s)
+    for i in range(len(ssets)):
+        for j in range(i, len(ssets)):
+            subset1 = ssets[i]
+            subset2 = ssets[j]
+            if(subset1 and subset2) and is_disjoint(subset1, subset2) and (len(subset1) == len(subset2)):# or (0 < ((len(subset1) - len(subset2)) * (sumup(subset1) - sumup(subset2))))):
+                if((len(subset1) < len(subset2))):
+                    resl.append((subset2, subset1))
+                else:
+                    resl.append((subset1, subset2))
+    return resl
+
+def sign(n):
+    res = n
+    if (n < 0):
+        res = -1
+    elif (0 < n):
+        res = 1
+    return res
+
+def s_comp(s1, s2):
+    res = True
+    i = 0
+    while res and (i < len(s1)):
+        res = res and (0 <= (s1[i]-s2[i])*(s1[0]-s2[0]))
+        i = i + 1
+    return res
+
+
+
+def sub_i(n, k):
+    res = []
+    if (1 == k):
+        for i in range(n):
+            res.append([i])
+    elif(1 < k):
+        for si in sub_i(n, k-1):
+            m = max(si)
+            while m < n-1:
+                res.append(si+[m+1])
+                m = m + 1
+    return res
+
+def sub_s(s, k):
+    res = []
+    for si in sub_i(len(s), k):
+        res.append([s[i] for i in si])
+    return res
+
+
+#s = [3,5,6,7]
+#s = [20,31,38,39,40,42,45]
+#s = [1,2,3,4]
+s = list(range(12))
+#sps = equ_subset_pairs(s)
+#print(len(sps))
+#for p in sps:
+#    print(p)
+
+i = 0
+#for p in sps:
+#    if(len(p[0]) == len(p[1])) and (not s_comp(p[0], p[1])):
+#        i = i + 1
+#        print(p, sumup(p[0]), sumup(p[1]))
+
+for n in range(2, len(s)):
+    subs = sub_s(s, n)
+    print(n, len(subs))
+    for j in range(len(subs)):
+        for k in range(j, len(subs)):
+            if (not s_comp(subs[j], subs[k])) and (is_disjoint(subs[j], subs[k])):
+#                print(subs[j], subs[k])
+                i = i + 1
+#        print(i, j, k)
+#    print(i, j, k)
+print(i)
