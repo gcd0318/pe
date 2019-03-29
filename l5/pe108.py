@@ -113,6 +113,29 @@ def sols(n):
         res = res * (i+1)
     return math.ceil(res/2)
 
+def find(n):
+    res = 1
+    ps = prime_rate(n)
+    rs = []
+    for k in ps:
+        for i in range(ps[k]):
+            rs.append(k)
+    print(rs)
+    rs.sort(reverse=True)
+    primes = top_n_primes(len(rs))
+    print(primes)
+    i = 0
+    while i < len(rs):
+        res = res * (primes[i] ** (math.ceil((rs[i] - 1) / 2)))
+        i = i + 1
+    return res
+
+s = (15*15*7 + 1)//2
+print(find(s*2-1))
+
+
+
+
 n = 2
 s = sols(n)
 m = s
