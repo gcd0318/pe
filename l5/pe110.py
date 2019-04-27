@@ -155,5 +155,23 @@ def a_num(num):
     return res
 
 
-num = 1000000
-print(get_n(a_num(num)))
+def nod(n):
+    ps = prime_rate(n)
+    res = 1
+    for r in ps.values():
+        res = res * (r + 1)
+    return res
+
+
+
+
+
+
+num = 4000000
+
+n = num
+nd = nod(n)
+while nd < num:
+    n = n + 1
+    nd = nod(n)
+print(n)
