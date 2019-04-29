@@ -122,14 +122,12 @@ def sols(n):
 def find(n):
     res = 1
     ps = prime_rate(n)
-    print(ps)
     rs = []
     for k in ps:
         for i in range(ps[k]):
             rs.append(k)
     rs.sort(reverse=True)
     primes = top_n_primes(len(rs))
-    print(primes)
     i = 0
     while i < len(rs):
         res = res * (primes[i] ** (math.ceil((rs[i] - 1) / 2)))
@@ -142,7 +140,6 @@ def get_n(s):
     while(0 == v % 2):
         i = i + 1
         v = math.floor(math.sqrt(i*2))
-    print(v)
     return find(v**2)
 
 def a_num(num):
@@ -151,27 +148,73 @@ def a_num(num):
     i = 0
     while (i < len(ps)) and (res < num):
         res = res * ps[i]
-    print(res)
     return res
 
 
 def nod(n):
-    ps = prime_rate(n)
+    return pr2nod(prime_rate(n))
+
+def nextPrime(n):
+    if isPrime(n):
+        n = n + 1
+    while not isPrime(n):
+        n = n + 1
+    return n
+
+def max_p(num):
+    p = 3
+    i = 1
+    while p < num:
+        p = p * 3
+        i = i + 1
+    return top_n_primes(i+1)
+
+
+def prod(l):
     res = 1
-    for r in ps.values():
-        res = res * (r + 1)
+    for i in l:
+        res = res * i
     return res
 
+def pr2n(pr):
+    res = 1
+    for p in pr:
+        res = res * (p**pr[p])
+    return res
 
+def pr2nod(pr):
+    res = 1
+    for v in pr.values():
+        res = res * (v*2 + 1)
+    return res
 
 
 
 
 num = 4000000
+ps = max_p(num)
+print(ps)
+pr  ={}
+for p in ps:
+    pr[p] = 1
+ps.sort(reverse=True)
+m = pr2n(pr)
 
-n = num
-nd = nod(n)
-while nd < num:
-    n = n + 1
-    nd = nod(n)
-print(n)
+for p in ps:
+    print(p)
+    tpr = pr.copy()
+    while (0 < tpr[p]) and (pr2nod(tpr) >= num):
+        pr = tpr.copy()
+        print('pr:', pr)
+        print('pr2nod:', pr2nod(tpr))
+        tpr[p] = tpr[p] - 1
+        tpsr = prime_rate(p - 1)
+        print('tpsr:', tpsr)
+        for tp in tpsr:
+            tpr[tp] = tpr[tp] + tpsr[tp]
+        print('tpr:', tpr)
+    m = pr2n(pr)
+    print('====================')
+    print((0 < tpr[p]), (pr2nod(tpr) >= num))
+    
+    print(m)
