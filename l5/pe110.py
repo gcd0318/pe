@@ -56,17 +56,18 @@ def intoPrime(n):
     return [n]
 
 def prime_rate(x):
-    l = intoPrime(x)
     d = {}
-    for i in l:
-        d[i] = 0
-    for i in l:
-        r = 0
-        t = x
-        while(0 == t % i):
-            r = r + 1
-            t = t // i
-        d[i] = r
+    if(1 < x):
+        l = intoPrime(x)
+        for i in l:
+            d[i] = 0
+        for i in l:
+            r = 0
+            t = x
+            while(0 == t % i):
+                r = r + 1
+                t = t // i
+            d[i] = r
     return d
 
 def top_n_primes(n):
@@ -190,7 +191,6 @@ def pr2nod(pr):
 
 
 
-
 num = 4000000
 ps = max_p(num)
 print(ps)
@@ -199,22 +199,32 @@ for p in ps:
     pr[p] = 1
 ps.sort(reverse=True)
 m = pr2n(pr)
+print(m)
+ms = []
+prs = [pr]
 
-for p in ps:
-    print(p)
-    tpr = pr.copy()
-    while (0 < tpr[p]) and (pr2nod(tpr) >= num):
-        pr = tpr.copy()
-        print('pr:', pr)
-        print('pr2nod:', pr2nod(tpr))
-        tpr[p] = tpr[p] - 1
-        tpsr = prime_rate(p - 1)
-        print('tpsr:', tpsr)
-        for tp in tpsr:
-            tpr[tp] = tpr[tp] + tpsr[tp]
-        print('tpr:', tpr)
-    m = pr2n(pr)
-    print('====================')
-    print((0 < tpr[p]), (pr2nod(tpr) >= num))
-    
-    print(m)
+pri = 0
+while pri < len(prs):
+    pr = prs[pri]:
+    for p in ps:
+        print(p)
+        tpr = pr.copy()
+        while(0 < tpr[p]):
+            while(pr2nod(tpr) >= num):
+                print('pr:', pr)
+                print('pr2nod:', pr2nod(tpr))
+                tpr[p] = tpr[p] - 1
+                tpsr = prime_rate(p - 1)
+                print('tpsr:', tpsr)
+                for tp in tpsr:
+                    tpr[tp] = tpr[tp] + tpsr[tp]
+                print('tpr:', tpr)
+                m = pr2n(pr)
+                if(pr2nod(tpr) >= num):
+                    ms.append(m)
+                    pr = tpr.copy()
+                print('====================')
+                print((0 < tpr[p]), (pr2nod(tpr) >= num))
+            ms.append(m)
+        
+    print(min(ms))
