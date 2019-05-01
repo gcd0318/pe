@@ -19,6 +19,35 @@ NOTE: This problem is a much more difficult version of Problem 108 and as it is 
 
 import math
 
+def insertC2S(s, c, i):
+    if(0 == i):
+        return(c + s)
+    elif(len(s) <= i):
+        return(s + c)
+    else:
+        return(s[:i]+c+s[i:])
+
+def permute(l):
+    if(0 == len(l)):
+        return []
+    else:
+        res = []
+        tl = []
+        c = l.pop()
+        tl.append(c)
+        while(0 < len(l)):
+            ttl = []
+            c = l.pop()
+            while(0 < len(tl)):
+                x = tl.pop()
+                for i in range(0, len(x)+1):
+                    ttl.append(insertC2S(x, c, i))
+            for x in ttl:
+                tl.append(x)
+            if(0 == len(l)):
+                res = tl
+        return res
+
 def lessPrime(n):
     res = []
     l = [0,0]
@@ -189,7 +218,26 @@ def pr2nod(pr):
         res = res * (v*2 + 1)
     return res
 
+def permute_list(l):
+    resl = [l]
+    i = 0
+    while (i < len(resl)):
+        tmpl = resl[i]
+        for j in range(len(tmpl)):
+            rl = tmpl[:j] + tmpl[j+1:]
+            if not(rl in resl):
+                resl.append(rl)
+        i = i + 1
+    return resl
 
+def addd(d1, d2):
+    resd = d1.copy()
+    for k2 in d2:
+        if k2 in resd:
+            resd[k2] = resd[k2] + d2[k2]
+        else:
+            resd[k2] = d2[k2]
+    return resd
 
 num = 4000000
 ps = max_p(num)
@@ -199,32 +247,19 @@ for p in ps:
     pr[p] = 1
 ps.sort(reverse=True)
 m = pr2n(pr)
-print(m)
+mr = math.ceil(math.log2(m))
+print(m, mr)
 ms = []
-prs = [pr]
 
-pri = 0
-while pri < len(prs):
-    pr = prs[pri]:
-    for p in ps:
-        print(p)
-        tpr = pr.copy()
-        while(0 < tpr[p]):
-            while(pr2nod(tpr) >= num):
-                print('pr:', pr)
-                print('pr2nod:', pr2nod(tpr))
-                tpr[p] = tpr[p] - 1
-                tpsr = prime_rate(p - 1)
-                print('tpsr:', tpsr)
-                for tp in tpsr:
-                    tpr[tp] = tpr[tp] + tpsr[tp]
-                print('tpr:', tpr)
-                m = pr2n(pr)
-                if(pr2nod(tpr) >= num):
-                    ms.append(m)
-                    pr = tpr.copy()
-                print('====================')
-                print((0 < tpr[p]), (pr2nod(tpr) >= num))
-            ms.append(m)
-        
-    print(min(ms))
+for p in ps:
+    i = 2
+    tpr = pr.copy()
+    while (i < p) and (pr2nod(tpr) >= num*2 - 1):
+        pr = tpr.copy()
+        while (tpr[p] > 0) and (pr2nod(tpr) >= num*2 - 1):
+            tpr[p] = tpr[p] - 1
+            tpr = addd(tpr, prime_rate(i))
+        if pr2nod(tpr) < num*2 - 1:
+            tpr = pr.copy()
+        i = i + 1
+print(pr2n(pr))
