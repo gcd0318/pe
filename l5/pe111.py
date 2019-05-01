@@ -163,5 +163,16 @@ def get(num):
 print(lessPrime(100))
 
 
+def is_prime_by_div(n):
+    ds = list(range(2, math.ceil(math.sqrt(n))))
+    i = 0
+    res = True
+    while res and (i < len(ds)):
+        res = res and (0 == n % ds[i])
+        i = i + 1
+    return res
+        
+
+
 r = get(10)
 print(r)
