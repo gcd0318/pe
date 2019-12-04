@@ -9,17 +9,17 @@ So M(4, 1) = 3 is the maximum number of repeated digits for a 4-digit prime wher
 
 In the same way we obtain the following results for 4-digit primes.
 
-Digit, d	M(4, d)	N(4, d)	S(4, d)
-0	2	13	67061
-1	3	9	22275
-2	3	1	2221
-3	3	12	46214
-4	3	2	8888
-5	3	1	5557
-6	3	1	6661
-7	3	9	57863
-8	3	1	8887
-9	3	7	48073
+Digit, d    M(4, d)    N(4, d)    S(4, d)
+0    2    13    67061
+1    3    9    22275
+2    3    1    2221
+3    3    12    46214
+4    3    2    8888
+5    3    1    5557
+6    3    1    6661
+7    3    9    57863
+8    3    1    8887
+9    3    7    48073
 For d = 0 to 9, the sum of all S(4, d) is 273700.
 
 Find the sum of all S(10, d).
@@ -127,41 +127,38 @@ def isPrime(n):
                     t = t + i
     return(0 != l[n])
 
-def between_primes(s, e):
-	resl = []
-	for i in lessPrime(e):
-		if i >=s:
-			resl.append(i)
-	return resl
+def betweenPrimes(s, e):
+    resl = []
+    for i in lessPrime(e):
+        if i >=s:
+            resl.append(i)
+    return resl
 
 def into_digits(n):
-	resl = []
-	for c in str(n):
-		resl.append(c)
-	return resl
+    resl = []
+    for c in str(n):
+        resl.append(c)
+    return resl
 
 def get(num):
-	l = between_primes(10**(num-1), 10**num-1)
-	print(len(l))
-#	resd = {}
-	res = 0
-	for d in range(10):
-		rd = {}
-		for i in l:
-			k = str(i).count(str(d))
-			if k in rd:
-				rd[k].append(i)
-			else:
-				rd[k] = [i]
-		m = max(rd.keys())
-#		n = len(rd[m])
-		s = sum(rd[m])
-		resd[d] = [m, n, s]
-#		res = res + s
-	return resd
-
-print(lessPrime(100))
-
+    l = between_primes(10**(num-1), 10**num-1)
+    print(len(l))
+#    resd = {}
+    res = 0
+    for d in range(10):
+        rd = {}
+        for i in l:
+            k = str(i).count(str(d))
+            if k in rd:
+                rd[k].append(i)
+            else:
+                rd[k] = [i]
+        m = max(rd.keys())
+#        n = len(rd[m])
+        s = sum(rd[m])
+        resd[d] = [m, n, s]
+#        res = res + s
+    return resd
 
 def is_prime_by_div(n):
     ds = list(range(2, math.ceil(math.sqrt(n))))
@@ -171,8 +168,56 @@ def is_prime_by_div(n):
         res = res and (0 == n % ds[i])
         i = i + 1
     return res
-        
 
+ps = lessPrime(math.ceil(math.sqrt(9999999999)))
+print(len(ps))
 
-r = get(10)
-print(r)
+def is_prime(n):
+    pivot = math.ceil(math.sqrt(n))
+    i = 0
+    res = False
+    while (ps[i] <= pivot) and (n % ps[i] != 0):
+        i = i + 1
+#    print(n, '/', ps[i], '=', n//ps[i])
+    return ps[i] > pivot
+
+def gen_data(n, m, d):
+    s = 10 ** (n-1)
+    resl = []
+    for t in nmd(n, m, d):
+        i = int(t)
+        if (not (i in resl)) and (s <= i):
+            resl.append(i)
+    return resl
+
+def nmd(n, m, d):
+    whole = '0123456789'
+    resl = []
+    s = 10 ** (n-1)
+    if (m <= n) and (0 <= m):
+        if (1 == n):
+            if (1 == m):
+                resl = [str(d)]
+            else:
+                resl = list(whole.replace(str(d), ''))
+        else:
+            for i in nmd(n-1, m-1, d):
+                tmp = str(d) + i
+                if not (tmp in resl):
+                    resl.append(str(d) + i)
+            for i in nmd(n-1, m, d):
+                for j in whole.replace(str(d), ''):
+                    tmp = j + i
+                    if not (tmp in resl):
+                        resl.append(j + i)
+    return resl
+
+r = gen_data(5, 2, 1)
+# print(r)
+print(len(r))
+print(len(gen_data(4, 2, 1)))
+print(len(gen_data(4, 1, 1)))
+ls = [[5, 2, 1], [4, 2, 1], [4, 1, 1], [3, 1, 1], [3, 2, 1], [3, 0, 1]]
+for l in ls:
+    n, m, d = l
+    print(n, m, d, len(gen_data(n, m, d)))
