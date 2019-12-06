@@ -169,17 +169,14 @@ def is_prime_by_div(n):
         i = i + 1
     return res
 
-ps = lessPrime(math.ceil(math.sqrt(9999999999)))
-print(len(ps))
-
 def is_prime(n):
     pivot = math.ceil(math.sqrt(n))
     i = 0
     res = False
-    while (ps[i] <= pivot) and (n % ps[i] != 0):
+    while (i < len(ps)) and (ps[i] <= pivot) and (n % ps[i] != 0):
         i = i + 1
 #    print(n, '/', ps[i], '=', n//ps[i])
-    return ps[i] > pivot
+    return (len(ps) <= i) or (ps[i] > pivot)
 
 def gen_data(n, m, d):
     s = 10 ** (n-1)
@@ -190,34 +187,75 @@ def gen_data(n, m, d):
             resl.append(i)
     return resl
 
+resd = {}
 def nmd(n, m, d):
+    k = '.'.join([str(n), str(m), str(d)])
+    if k in resd:
+        return resd[k]
+#    print('+' * n, 'enter', '-' * m)
+#    print(n, m, d)
     whole = '0123456789'
+    base = whole.replace(str(d), '')
     resl = []
     s = 10 ** (n-1)
-    if (m <= n) and (0 <= m):
-        if (1 == n):
-            if (1 == m):
-                resl = [str(d)]
+    if (0 < m):
+        if (m <= n):
+            if (1 == n):
+                if (1 == m):
+                    resl = [str(d)]
+                else:
+                    resl = list(base)
             else:
-                resl = list(whole.replace(str(d), ''))
-        else:
-            for i in nmd(n-1, m-1, d):
-                tmp = str(d) + i
-                if not (tmp in resl):
-                    resl.append(str(d) + i)
-            for i in nmd(n-1, m, d):
-                for j in whole.replace(str(d), ''):
-                    tmp = j + i
+                for i in nmd(n-1, m-1, d):
+                    tmp = str(d) + i
                     if not (tmp in resl):
-                        resl.append(j + i)
+                        resl.append(str(d) + i)
+                for i in nmd(n-1, m, d):
+                    for j in base:
+                        tmp = j + i
+                        if not (tmp in resl):
+                            resl.append(j + i)
+    else:
+        resl = perm(base, n)
+#    print(n, m, d, len(resl), '\n', resl)
+#    print('+' * n, 'enter', '-' * m)
+    resd[k] = resl
     return resl
 
-r = gen_data(5, 2, 1)
-# print(r)
-print(len(r))
-print(len(gen_data(4, 2, 1)))
-print(len(gen_data(4, 1, 1)))
-ls = [[5, 2, 1], [4, 2, 1], [4, 1, 1], [3, 1, 1], [3, 2, 1], [3, 0, 1]]
-for l in ls:
-    n, m, d = l
-    print(n, m, d, len(gen_data(n, m, d)))
+def perm(s, n):
+    res = []
+    if (1 == n):
+        res = list(s)
+    else:
+        for i in perm(s, n-1):
+            for j in s:
+                res.append(j + i)
+    return res
+
+def primes(n, d):
+    m = n
+    rd = {}
+    primes = []
+    while(0 < m) and (0 == len(primes)):
+        primes = []
+        samples = []
+        tmpl = nmd(n, m, d)
+#        print(n, m, d, tmpl)
+        for s in tmpl:
+            if '0' != s[0]:
+                samples.append(int(s))
+        for i in samples:
+            if is_prime(i):
+                primes.append(i)
+        m = m - 1
+    return m, primes
+
+n = 10
+ps = lessPrime(math.ceil(math.sqrt(10**n - 1)))
+
+s = 0
+for i in range(10):
+    m, data = primes(n, i)
+    s = s + sum(data)
+    print(i, m, data, len(data), sum(data))
+print(s)
