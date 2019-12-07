@@ -10,52 +10,30 @@ As n increases, the proportion of bouncy numbers below n increases such that the
 How many numbers below a googol (10100) are not bouncy?
 """
 
-def inc(n):
-    res = True
-    s = str(n)
-    i = 0
-    while res and (i < len(s)-1):
-        res = s[i] <= s[i + 1]
-        i = i + 1
+
+
+def not_b(n):
+    res = 0
+    if (n <= 1):
+        res = 10 **n -1
+    elif (1 < n):
+        l = [1] * 10
+        sigmal = l + []
+        for i in range(1, n):
+            bakl = sigmal + []
+            sigmal = []
+            for j in range(len(l)):
+                sigmal.append(sum(l[:j+1]))
+            l = sigmal + []
+        res = 2 * sum(sigmal[:-1]) -10 + sum(bakl)
     return res
 
-def dec(n):
-    res = True
-    s = str(n)
-    i = 0
-    while res and (i < len(s)-1):
-        res = s[i+1] <= s[i]
-        i = i + 1
-    return res
 
-def bou(n):
-    return not(inc(n) or dec(n))
+def all_nb(n):
+    r = 0
+    for x in range(n+1):
+        nb = not_b(x)
+        r = r + nb
+    return r
 
-def bou1(n):
-    res = (100 >= n)
-    if (100 < n):
-        if inc(n % 100):
-            pass
-
-
-
-def bou2(n):
-    res = n - 100
-    s = str(n)
-    i, j, k = 0, 1, 2
-    while (0 < res) and (i < len(s)-2):
-        res = res * (int(s[i]) - int(s[j])) * (int(s[j]) - int(s[k]))
-        i = i + 1
-        j = j + 1
-        k = j + 1
-    return res > 0
-
-N = 10**10
-
-c = 0
-for i in range(1, N):
-    if inc(i) or dec(i):
-        c = c + 1
-    if (i % 1000000 == 0):
-        print(i, c)
-print(c)
+print(all_nb(100))
