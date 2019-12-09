@@ -29,12 +29,12 @@ def order(a, b):
 def cover(n, m):
     res = 0
     i = 1
-    while m*i < n:
+    while m*i <= n:
         res = res + order(n - m*i, i)
         i = i + 1
     return res
 
-N = 7
+N = 50
 
 ttl = 0
 for c in (R, G, B):
