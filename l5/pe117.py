@@ -9,6 +9,7 @@ NOTE: This is related to Problem 116.
 
 import math
 
+D = 1
 R = 2
 G = 3
 B = 4
@@ -16,27 +17,27 @@ B = 4
 def order(a, b):
     return math.factorial(a+b) // (math.factorial(a ) * math.factorial(b))
 
+def cover(n, m):
+    res = 0
+    i = 1
+    while m*i <= n:
+        res = res + order(n - m*i, i)
+        i = i + 1
+    return res
+
+d = {1:1, 2:2, 3:4, 4:8, 5:15}
+
 def tile(n):
+    res = 0
     if n in d:
         res = d[n]
     else:
-        res = 1
-        for c in (R, G, B):
-            if (c <= n):
-                for 
-
+        for c in (D, R, G, B):
+            res = res + tile(n - c)
         d[n] = res
-
     return res
-
 
 
 N = 50
 
-ttl = 0
-for c in (R, G, B):
-    r = cover(N, c)
-    print(c, r)
-    ttl = ttl + r
-
-print(ttl)
+print(tile(N))
