@@ -113,6 +113,81 @@ def betweenPrimes(s, e):
             resl.append(i)
     return resl
 
+def insertC2S(s, c, i):
+    if(0 == i):
+        return(c + s)
+    elif(len(s) <= i):
+        return(s + c)
+    else:
+        return(s[:i]+c+s[i:])
 
-ps = lessPrime(98765431)
-print(len(ps))
+def permute(l):
+    if(0 == len(l)):
+        return []
+    else:
+        res = []
+        tl = []
+        c = l.pop()
+        tl.append(c)
+        while(0 < len(l)):
+            ttl = []
+            c = l.pop()
+            while(0 < len(tl)):
+                x = tl.pop()
+                for i in range(0, len(x)+1):
+                    ttl.append(insertC2S(x, c, i))
+            for x in ttl:
+                tl.append(x)
+            if(0 == len(l)):
+                res = tl
+        return res
+
+sps = lessPrime(math.ceil(math.sqrt(98765431)))
+
+def is_p(n):
+    pivot = 0
+    i = 0
+    if (n in sps):
+        i = len(sps)
+    elif (n <= 98765431):
+        pivot = math.sqrt(n)
+        while (i < len(sps)) and (sps[i] <= pivot) and (0 == n % sps[i]):
+            i = i + 1
+    return (i >= len(sps)) or (sps[i] > pivot)
+
+resl = []
+for i in permute(list('123456789')):
+    tmp = []
+    if not(i[-1] in '468') and (not((i[-1] in '25') and (i[-2] in '468'))):
+        h = 0
+        t = len(i)
+        s = h
+        e = s + 1
+        tmp = []
+        if '2' == i[-1]:
+            tmp = ['2']
+            i = i[:-1]
+        if i[0] in '14689':
+            e = e + 1
+        if (e > 1) and (i[e-1] in '1245689'):
+            e = e + 1
+        while (s < t-1) and (e <= t-1):
+#            print(i, s, e)
+            n = int(i[s: e])
+            if is_p(n):
+#                print(i, n)
+                tmp.append(str(n))
+                s = e
+                e = s + 1
+            else:
+#                print(i, n, s, e)
+                e = e + 1
+#    print(tmp)
+    if 9 == len(''.join(tmp)):
+        tmp.sort()
+#        print(tmp)
+        t_s = '.'.join(tmp)
+        if not (t_s in resl):
+            resl.append(t_s)
+#            print(t_s)
+print(len(resl))
