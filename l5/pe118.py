@@ -145,15 +145,16 @@ def permute(l):
 sps = lessPrime(math.ceil(math.sqrt(98765431)))
 
 def is_p(n):
-    pivot = 0
+    pivot = sps[-1]
     i = 0
     if (n in sps):
-        i = len(sps)
-    elif (n <= 98765431):
+        i = len(sps) + 1
+    elif (1 < n <= 98765431):
         pivot = math.sqrt(n)
-        while (i < len(sps)) and (sps[i] <= pivot) and (0 == n % sps[i]):
+        while (i < len(sps)) and (sps[i] <= pivot) and (0 != n % sps[i]):
             i = i + 1
     return (i >= len(sps)) or (sps[i] > pivot)
+
 
 resl = []
 for i in permute(list('123456789')):
@@ -169,7 +170,7 @@ for i in permute(list('123456789')):
             i = i[:-1]
         if i[0] in '14689':
             e = e + 1
-        if (e > 1) and (i[e-1] in '1245689'):
+        while (e > 1) and (i[e-1] in '1245689'):
             e = e + 1
         while (s < t-1) and (e <= t-1):
 #            print(i, s, e)
@@ -189,5 +190,5 @@ for i in permute(list('123456789')):
         t_s = '.'.join(tmp)
         if not (t_s in resl):
             resl.append(t_s)
-#            print(t_s)
+            print(t_s)
 print(len(resl))
