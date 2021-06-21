@@ -6,6 +6,7 @@ How many distinct sets containing each of the digits one through nine exactly on
 
 import math
 
+
 def lessPrime(n):
     res = []
     l = [0,0]
@@ -92,9 +93,7 @@ def mul(l):
 
 def isPrime(n):
     l = [0,0]
-    if(2 > n):
-        return None
-    else:
+    if (2 <= n):
         for i in range(2, n+1):
             l.append(i)
         for i in l:
@@ -142,7 +141,7 @@ def permute(l):
                 res = tl
         return res
 
-sps = lessPrime(math.ceil(math.sqrt(98765431)))
+# sps = lessPrime(math.ceil(math.sqrt(98765431)))
 
 def is_p(n):
     pivot = sps[-1]
@@ -156,9 +155,122 @@ def is_p(n):
     return (i >= len(sps)) or (sps[i] > pivot)
 
 
-resl = []
-for i in permute(list('123456789')):
-    tmp = []
+def layer(n):
+    s = str(n)
+    return (s[-1] in '468') or ((1 < len(s)) and (s[-1] in '25'))
+
+
+def split_prime(n):
+    res = {}
+    if not(((n % 10) in (4, 6, 8)) or (((n % 10) in (2, 5)) and (((n // 10) % 10) in (4, 6, 8)))):
+        s = str(n)
+        sep = 1
+        isp = False
+        while (sep <= len(s)) and not isp:
+            isp = isPrime(int(s[:sep]))
+            if not isp:
+                sep = sep + 1
+        head = int(s[:sep])
+        if (sep < len(s)):
+            tails = split_prime(int(s[sep:]))
+            if (0 < len(tails)):
+                res = {head}.union(tails)
+        elif isp:
+            res = {head}
+    return res
+
+def rev_split_prime(n):
+    res = {}
+    if not(((n % 10) in (4, 6, 8)) or (((n % 10) in (2, 5)) and (((n // 10) % 10) in (4, 6, 8)))):
+        s = str(n)
+        sep = len(s) - 1
+        isp = False
+        tail = int(s[sep:])
+        while (0 < sep) and not isp:
+            print(sep)
+            tail = int(s[sep:])
+            isp = isPrime(tail)
+            if not isp:
+                sep = sep - 1
+        print(sep, tail)
+        if (0 < sep):
+            heads = rev_split_prime(int(s[:sep]))
+            if (0 < len(heads)):
+                res = {tail}.union(heads)
+        elif isp:
+            res = {tail}
+    return res
+
+def is_prime(n):
+    i = 3
+    res = ((n < 10) and not (n in (2, 3, 5, 7))) or ((2 < n) and (0 == n % 2))
+    while (not res) and (i * i <= n):
+        res = (0 == n % i)
+        i = i + 2
+    return not res
+
+def primes(m):
+    ps = [2]
+    for n in range(m + 1):
+        res = (n <= 2)
+        i = 0
+        while (not res) and (ps[i] ** 2 <= n):
+            res = (0 == n % ps[i])
+            i = i + 1
+        if not res:
+            ps.append(n)
+    return ps
+
+
+if ('__main__' == __name__):
+    c = 0
+    for i in ['246819753']:
+#    for i in permute(list('123456789')):
+        tl = [0]
+        s = i
+        pos = 1
+        while (pos < len(s) - 1) and (int(s) > tl[-1]):
+            d = int(s[:pos])
+            while (pos < len(s) - 1) and (d < tl[-1]):
+                pos = pos + 1
+                d = int(s[:pos])
+            if is_prime(d):
+                tl.append(d)
+                print(s, tl, pos)
+                s = s[pos:]
+                pos = 1
+            else:
+                pos = pos + 1
+        d = int(s)
+        if (is_prime(int(s))) and (int(s) > tl[-1]):
+            tl.append(int(s))
+            print(i, tl)
+            c = c + 1
+    print(c)
+"""
+    N = 987654321
+    pfs = []
+
+    i = N
+    while (0 == i % 3):
+        pfs.append(3)
+        i = i // 3
+
+    print(i)
+    print(intoPrime(i))
+    pfs = pfs + intoPrime(i)
+
+    print(pfs)
+    l = []
+    for s in permute(list('123456789')):
+        n = int(s)
+        print(n)
+        if not((s[-1] in '468') or ((1 < len(s)) and (s[-1] in '25') and (s[-2] in '468'))):
+            sp = split_prime(n)
+            if (0 < len(sp)) and not(sp in l):
+                print(sp)
+                l.append(sp)
+    print(len(l))
     if not(i[-1] in '468') and (not((i[-1] in '25') and (i[-2] in '468'))):
         h = 0
         t = len(i)
@@ -192,3 +304,4 @@ for i in permute(list('123456789')):
             resl.append(t_s)
             print(t_s)
 print(len(resl))
+"""
