@@ -221,33 +221,67 @@ def primes(m):
             ps.append(n)
     return ps
 
+def splits(s, m=0):
+    resl = [[s]]
+    if (0 < len(s)):
+        pos = 1
+        while (pos <= len(s) / 2) and (int(s[:pos]) < m):
+            pos = pos + 1
+        while(pos <= len(s) / 2):
+            for l in splits(s[pos:], int(s[:pos])):
+                tl = [s[:pos]] + l
+                resl.append(tl)
+            pos = pos + 1
+    return resl
+
+
 
 if ('__main__' == __name__):
     c = 0
-    for i in ['246819753']:
-#    for i in permute(list('123456789')):
+    x = 0
+    alls = []
+    for i in permute(list('123456789')):
+        x = x + 1
+        for l in splits(i):
+            if (1 < len(l)):
+                j = 0
+                while (j < len(l)) and is_prime(int(l[j])):
+                    j = j + 1
+                if (len(l) == j):
+                    c = c + 1
+                    print(l)
+                    alls.append(l)
+                else:
+                    print(l, l[j])
+    print(x, c, len(alls))
+
+
+"""
+
         tl = [0]
         s = i
         pos = 1
-        while (pos < len(s) - 1) and (int(s) > tl[-1]):
+        while (pos <= len(s)  / 2) and (int(s) > tl[-1]):
             d = int(s[:pos])
-            while (pos < len(s) - 1) and (d < tl[-1]):
+            while (pos <= len(s) / 2) and (d < tl[-1]):
                 pos = pos + 1
                 d = int(s[:pos])
-            if is_prime(d):
-                tl.append(d)
-                print(s, tl, pos)
-                s = s[pos:]
-                pos = 1
-            else:
-                pos = pos + 1
+            if (pos <= len(s) / 2):
+                if is_prime(d):
+                    tl.append(d)
+                    s = s[pos:]
+                    pos = 1
+                else:
+                    pos = pos + 1
         d = int(s)
         if (is_prime(int(s))) and (int(s) > tl[-1]):
             tl.append(int(s))
             print(i, tl)
             c = c + 1
     print(c)
-"""
+
+
+
     N = 987654321
     pfs = []
 
