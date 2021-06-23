@@ -236,7 +236,36 @@ def splits(s, m=0):
 
 
 
+def split_all(s):
+    resl = [[s]]
+    for pos in range(1, len(s)):
+        for l in split_all(s[pos:]):
+            tl = [s[:pos]] + l
+            resl.append(tl)
+    return resl
+
+
+
 if ('__main__' == __name__):
+    sa = []
+    for s in permute(list('123456789')):
+        for l in split_all(s):
+            i = 0
+            while i < len(l) and is_prime(int(l[i])):
+                i = i + 1
+            if i == len(l):
+                sl = set(l)
+                if not (sl in sa):
+                    sa.append(sl)
+
+    print(len(sa))
+
+
+
+
+
+
+"""
     c = 0
     x = 0
     alls = []
@@ -255,8 +284,6 @@ if ('__main__' == __name__):
                     print(l, l[j])
     print(x, c, len(alls))
 
-
-"""
 
         tl = [0]
         s = i
