@@ -228,12 +228,28 @@ def primes(m):
     return ps
 
 def is_dps(i):
-    s = 0
-    for n in str(i):
-        s = s + int(n)
+    s = sum(int(x) for x in str(i))
     m = s
-    while m < i:
-        m = m * s
+    if (1 < m):
+        while m < i:
+            m = m * s
     return m == i
 
-print(is_dps(512))
+
+
+if __name__ == '__main__':
+    T = 30
+
+             
+
+
+    l = []
+    n = 81
+    while len(l) < 30:
+    #    print(n)
+        if is_dps(n):
+            l.append(n)
+            print(len(l), n)
+        n = n + 1
+    print(n)
+
