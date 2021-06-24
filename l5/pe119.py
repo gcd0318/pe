@@ -233,23 +233,29 @@ def is_dps(i):
     if (1 < m):
         while m < i:
             m = m * s
-    return m == i
-
+    return (10 <= i) and (m == i)
 
 
 if __name__ == '__main__':
     T = 30
 
-             
-
-
     l = []
-    n = 81
-    while len(l) < 30:
-    #    print(n)
-        if is_dps(n):
-            l.append(n)
-            print(len(l), n)
-        n = n + 1
-    print(n)
+    d = 1
+    while len(l) <= T:
+        d = d + 1
+        for i in range(2, 10 * d):
+            max_rates = math.floor(math.log(10 ** d, i))
+            rates = math.ceil(math.log(10 ** (d - 1), i))
+            ds = i ** rates
+            while rates <= max_rates:
+                if is_dps(ds) and (not(ds in l)):
+                    print(d, 'digits, base', i, 'rate', rates, ds)
+                    l.append(ds)
+                rates = rates + 1
+                ds = ds * i
+    l.sort()
+    print(len(l))
+    print(l)
+    for i in range(len(l)):
+        print(i + 1, l[i])
 
