@@ -25,114 +25,54 @@ We shall define m(k) to be the minimum number of multiplications to compute nk; 
 For 1 ≤ k ≤ 200, find ∑ m(k).
 """
 
-def intoPrime(n):
-    half = math.floor(math.sqrt(n))
-    l = [0, 0]
-    for i in range(2, half+1):
-        l.append(i)
-    i = 0
-    while (i < len(l)):
-        t = i
-        if (0 != l[i]):
-            while(t + i < len(l)):
-                t = t + i
-                l[t] = 0
-        i = i + 1
-    i = 0
-    while((0 < len(l))and((0 == i)or(0 != n % i))):
-        i = l.pop()
-        if (0 != i):
-            if (0 == n % i):
-                return [i] + intoPrime(int(n/i))
-    return [n]
-
-def primeRate(nlp, n):
-    d = {}
-    for i in nlp:
-        d[i] = 0
-    for np in nlp:
-        r = 0
-        t = n
-        while(0 == t % np):
-            r = r + 1
-            t = int(t/np)
-        d[np] = r
-    return d
-
-def prime_rate(n):
-    return primeRate(intoPrime(n), n)
-
-
-def sum_m(x):
-    d = {1: [1]}
-    for i in range(2, x + 1):
-        d[i] = d[i - 1] + [i]
-        if (0 == i % 2):
-            if len(d[i // 2]) < len(d[i - 1]):
-                d[i] = d[i // 2] + [i]
-        else:
-            for j in range(1, i // 2 + 1):
-                cand = list(set(d[j] + d[i - j]))
-                if len(d[i - 1]) < len(cand):
-                    d[i] = cand + [i]
-    return d
-
-
-
+def short(l):
+    resl = []
+    for tl in l:
+        if ([] == resl) or (len(resl) > len(tl)):
+            resl = tl
+    return resl
 
 T = 200
+# T = 15
 
 l = []
 for i in range(T + 1):
-    l.append(list(range(1, i + 1)))
+#    l.append(list(range(i)))
+    l.append([])
 
 for i in range(T + 1):
-    for j in l[i]:
-        if (i + j <= T) and (len(l[i]) + 1 < len(l[i + j])):
-            l[i + j] = l[i] + [i + j]
+    if (0 == i):
+        l[i] = [[]]
+    else:
+        for tl in l[i - 1]:
+            ntl = tl + [i]
+            if not(ntl in l[i]):
+                l[i].append(ntl)
+        for tl in l[i]:
+            if(i + 1 <= T):
+                ntl = tl + [i + 1]
+                if not(ntl in l[i + 1]):
+                    l[i + 1].append(ntl)
+            if(i * 2 <= T):
+                ntl = tl + [i * 2]
+                if not(ntl in l[i * 2]):
+                    l[i * 2].append(ntl)
+            for j in tl:
+                if (i + j <= T):
+                    ntl = tl + [i + j]
+                    if not (ntl in l[i + j]):
+                        l[i + j].append(ntl)
 
-
-
-
-"""
-for i in range(2, T):
-    cand = l[i] + [i + 1]
-    if len(l[i + 1]) >= len(cand):
-        l[i + 1] = cand
-    t = 2
-    j = i * t
-    cand = l[i] + [j]
-    while(j <= T):
-        if len(cand) <= len(l[j]):
-            l[j] = cand + []
-        t = t + 1
-        j = i * t
-        cand.append(j)
-
-for i in range(2, T):
-    tl = l[i]
-    for j in range(1, len(tl)):
-        for k in range(len(tl)):
-            l[tl[j]] + l[tl[j]]
-
-
-
-        
-
-
-
-
-um = sum_m(T)
-for i in range(1, T + 1):
-    print(i, len(sm[i]) - 1, sm[i])
-"""
 
 for i in range(len(l)):
-    print(i, len(l[i]) - 1, l[i])
+    print(i, len(short(l[i])) - 1)#, l[i])
 
 
 s = 0
 for tl in l:
-    if (0 < len(tl)):
-        s = s + len(tl) - 1
+    stl = short(tl)
+    if (0 < len(stl)):
+        s = s + len(stl) - 1
 print(s)
+
+
