@@ -35,6 +35,18 @@ def short(l):
 T = 200
 # T = 15
 
+"""
+l = []
+for i in range(T + 1):
+    l.append(list(range(1, i + 1)))
+
+for i in range(T + 1):
+    for j in l[i]:
+        if (i + j <= T) and (len(l[i]) + 1 < len(l[i + j])):
+            l[i + j] = l[i] + [i + j]
+"""
+
+
 l = []
 for i in range(T + 1):
 #    l.append(list(range(i)))
