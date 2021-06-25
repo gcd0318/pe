@@ -8,4 +8,47 @@ The least value of n for which the remainder first exceeds 109 is 7037.
 Find the least value of n for which the remainder first exceeds 1010.
 """
 
+B = 10 ** 10
 
+def top_n_primes(n, primes=[2]):
+    if (0 < n):
+        ins = 2
+#        primes = [2]
+        while(len(primes) < n):
+            ins = ins + 1
+            devided = False
+            i = 0
+            while not(devided) and (i < len(primes)):
+                devided = (0 == ins % primes[i])
+                i = i + 1
+            if not devided:
+                primes.append(ins)
+    return primes
+
+def nth_prime(n, primes=[2]):
+    res = 0
+    if (0 < n):
+        res = top_n_primes(n, primes)[-1]
+    return res
+
+# print(nth_prime(7037))
+
+def r(n, primes=[2]):
+    res = 2
+    if 0 != n % 2:
+        p = nth_prime(n, primes)
+        res = (2 * n * p) % (p * p)
+    return res
+
+primes = [2]
+print(r(3, primes))
+
+print(r(7036, primes) > 10 ** 9)
+print(r(7037, primes) > 10 ** 9)
+
+n = 7037
+while r(n, primes) < B:
+    print(n)
+    n = n + 2
+print(primes)
+print(n)
