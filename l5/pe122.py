@@ -32,8 +32,15 @@ def short(l):
             resl = tl
     return resl
 
+def refresh(al, tl):
+    l = al + []
+    if ([] == l) or ((len(short(l)) == len(tl)) and (not(tl in al))):
+        l.append(tl)
+    elif len(short(l)) >= len(tl):
+        l = [tl]
+    return l
+
 T = 200
-# T = 15
 
 """
 l = []
@@ -59,21 +66,25 @@ for i in range(T + 1):
         for tl in l[i - 1]:
             ntl = tl + [i]
             if not(ntl in l[i]):
-                l[i].append(ntl)
+                l[i] = refresh(l[i], ntl)
+#                l[i].append(ntl)
         for tl in l[i]:
             if(i + 1 <= T):
                 ntl = tl + [i + 1]
                 if not(ntl in l[i + 1]):
-                    l[i + 1].append(ntl)
+                    l[i + 1] = refresh(l[i + 1], ntl)
+#                    l[i + 1].append(ntl)
             if(i * 2 <= T):
                 ntl = tl + [i * 2]
                 if not(ntl in l[i * 2]):
-                    l[i * 2].append(ntl)
+                    l[i * 2] = refresh(l[i * 2], ntl)
+#                    l[i * 2].append(ntl)
             for j in tl:
                 if (i + j <= T):
                     ntl = tl + [i + j]
                     if not (ntl in l[i + j]):
-                        l[i + j].append(ntl)
+                        l[i + j] = refresh(l[i + j], ntl)
+#                        l[i + j].append(ntl)
 
 
 for i in range(len(l)):
