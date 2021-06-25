@@ -37,16 +37,25 @@ def r(n, primes=[2]):
     res = 2
     if 0 != n % 2:
         p = nth_prime(n, primes)
-        res = (2 * n * p) % (p * p)
+        if 2 * n < p:
+            res = 2 * n * p
+        else:
+            res = (2 * n * p) % (p * p)
     return res
 
-primes = [2]
-print(r(3, primes))
-
-print(r(7036, primes) > 10 ** 9)
-print(r(7037, primes) > 10 ** 9)
 
 n = 7037
+primes = top_n_primes(n)
+print(primes[-1])
+print(r(7036, primes))
+print(r(7037, primes))
+while primes[-1] < 10 ** 5:
+    n = n + 2
+    primes = top_n_primes(n, primes)
+
+print(n)
+print(primes[-1])
+
 while r(n, primes) < B:
     print(n)
     n = n + 2
