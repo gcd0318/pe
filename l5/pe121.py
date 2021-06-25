@@ -46,10 +46,12 @@ def prime_rate(x):
     return d
 
 def rate_add(r1, r2):
-    return reduct([r1[0] * r2[1] + r1[1] * r2[0], r1[1] * r2[1]])
+    return [r1[0] * r2[1] + r1[1] * r2[0], r1[1] * r2[1]]
+#    return reduct([r1[0] * r2[1] + r1[1] * r2[0], r1[1] * r2[1]])
 
 def rate_mul(r1, r2):
-    return reduct([r1[0] * r2[0], r1[1] * r2[1]])
+    return r1[0] * r2[0], r1[1] * r2[1]]
+#    return reduct([r1[0] * r2[0], r1[1] * r2[1]])
 
 def i2bs(i, length):
     s = str(bin(i))[2:]
@@ -94,6 +96,26 @@ def rate(rounds):
     for r in range(1, rounds + 1):
         win_rate = (1, r + 1)
 
+
+
+def win_pick_f(rounds):
+    wins = rounds // 2 + 1
+    rates = 0
+    for i in range(2 ** rounds):
+        rate = 1
+        bs = i2bs(i, rounds)
+        if ones(bs) >= wins:
+            for c in range(len(bs)):
+                if ('1' == bs[c]):
+                    rate = rate * Fraction(1, c + 2)
+                else:
+                    rate = rate * Fraction(c + 1, c + 2)
+                c = c + 1
+            rates = rates + rate
+    return rates
+
+
+
 wp  = win_pick(15)
 print(wp)
-print(wp[1] // wp[0] - 1)
+print(wp[1] // wp[0])
