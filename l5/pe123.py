@@ -49,8 +49,12 @@ primes = top_n_primes(n)
 print(primes[-1])
 print(r(7036, primes))
 print(r(7037, primes))
+
+
+
 while primes[-1] < 10 ** 5:
     n = n + 2
+    print(n)
     primes = top_n_primes(n, primes)
 
 print(n)
