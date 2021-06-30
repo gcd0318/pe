@@ -12,4 +12,54 @@ It turns out that 154 is the least value of n for which C(n) = 10.
 Find the least value of n for which C(n) = 1000.
 """
 
- 
+def blocks(n, a, b, c):
+    face = 2 * n * (a * b + a * c + b * c)
+    edge = 2 * n * (n -1) * (a + b + c)
+    acme = 4 * n * (n - 1) * (n - 2) // 3
+    return face + edge + acme
+
+def cover(n, a, b, c):
+    res = 0
+    if 0 < n:
+        res = 2 * (a * b + a * c + b * c) + 4 * (n - 1) * (a + b + c) + 4 * (n - 1) * (n - 2)
+    return res
+
+def combines(mx):
+    res = []
+    for i in range(1, mx + 1):
+        for j in range(1, i + 1):
+            res.append([mx, i, j])
+    return res
+
+def C(n):
+    res = []
+    mbs = n // 2 - 2
+    for m in range(1, mbs):
+        for a, b, c in combines(m):
+            i = 1
+            bs = cover(i, a, b, c)
+            while bs < n:
+                i = i + 1
+                bs = cover(i, a, b, c)
+            if bs == n:
+                res.append([i, a, b, c])
+#    print(n, len(res))
+#    for cb in res:
+#        print(cb)
+#    print('=' * 10)
+    return len(res)
+
+
+print(C(22))
+print(C(46))
+print(C(78))
+print(C(118))
+print(C(142))
+print(C(154))
+
+N = 1000
+i = 6
+while C(i) != N:
+    i = i + 2
+
+print(i)
